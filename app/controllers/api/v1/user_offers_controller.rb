@@ -1,4 +1,4 @@
-class UserOffersController < ApplicationController
+class Api::V1::UserOffersController < ApplicationController
   def create
     # First validate that the offer exists
     @offer = Offer.find_by(id: params[:id])

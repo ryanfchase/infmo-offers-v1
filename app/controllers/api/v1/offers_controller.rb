@@ -1,4 +1,4 @@
-class OffersController < ApplicationController
+class Api::V1::OffersController < ApplicationController
   def index
     if signed_in?
       offers = Offer.all.select { |offer| offer.eligible?(current_user) }
