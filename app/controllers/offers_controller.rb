@@ -1,4 +1,4 @@
-class OffersController < ApplicationController
+class OffersController < ApplicationController::API
   before_action :require_user, only: [:index, :show]
 
   def index

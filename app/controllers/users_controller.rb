@@ -1,4 +1,5 @@
-class UsersController < ApplicationController
+class UsersController < ApplicationController::API
+
   def show
     if current_user.nil?
       render json: { errors: 'User not logged in' }, status: :unauthorized
