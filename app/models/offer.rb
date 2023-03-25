@@ -5,4 +5,5 @@ class Offer < ApplicationRecord
   def eligible?(user)
     (target_gender == user.gender || target_gender == 'any') &&
     (user.age.between?(target_age_min, target_age_max))
+  end
 end

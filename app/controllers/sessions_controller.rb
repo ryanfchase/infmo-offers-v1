@@ -1,4 +1,4 @@
-class SessionsController < ApplicationController::API
+class SessionsController < ApplicationController
 
   def new
     @user = User.new
@@ -7,7 +7,7 @@ class SessionsController < ApplicationController::API
   def create
     @user = User.find_by(user_name: params[:user_name])
     if @user && @user.authenticate(params[:password])
-      session[:user_id] = @user.id
+      sign_in @user
       render json: { status: 'success', message: "Welcome back, #{params[:user_name]}!"}, status: :created
     else
       render json: { status: 'error', errors: 'Invalid username or password' }, status: :unauthorized
@@ -15,7 +15,7 @@ class SessionsController < ApplicationController::API
   end
 
   def destroy
-    session[:user_id] = nil
+    sign_out
     render json: { status: 'success', message: 'Logged out' }, status: :ok
   end
 

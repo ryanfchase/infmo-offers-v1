@@ -1,9 +1,11 @@
-class OffersController < ApplicationController::API
-  before_action :require_user, only: [:index, :show]
-
+class OffersController < ApplicationController
   def index
-    offers = Offer.all.select { |offer| offer.eligible?(current_user) }
-    render json: offers, status: :ok
+    if signed_in?
+      offers = Offer.all.select { |offer| offer.eligible?(current_user) }
+      render json: offers, status: :ok
+    else
+      render json: Offer.all, each_serializer: OfferSerializer, status: :ok
+    end
   end
 
   def show

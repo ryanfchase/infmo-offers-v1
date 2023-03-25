@@ -1,4 +1,4 @@
-class UsersController < ApplicationController::API
+class UsersController < ApplicationController
 
   def show
     if current_user.nil?
@@ -11,7 +11,7 @@ class UsersController < ApplicationController::API
   def create
     @user = User.new(user_params)
     if @user.save
-      session[:user_id] = @user.user_id
+      sign_in @user
       render json: { status: 'success', message: "Welcome to the site, #{user_params[:first_name]}!"}, status: :created
     else
       render json: { status: 'error', errors: @user.errors.full_messages }, status: :unprocessable_entity
