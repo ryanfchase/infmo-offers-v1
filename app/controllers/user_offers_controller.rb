@@ -1,0 +1,2 @@
+class UserOffersController < ApplicationController
+end
