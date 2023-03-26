@@ -10,6 +10,25 @@ class User < ApplicationRecord
   validates :birthdate, presence: true
   validates :gender, presence: true
 
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    puts "FIND_FOR_DATABASE_AUTHENTICATION-----------------------"
+    puts conditions
+    if user_name = conditions.delete(:user_name)
+      # puts user_name.to_s
+      puts "???"
+      puts where(conditions.to_h).where(["lower(user_name) = :value", { :value => user_name.downcase }]).first.inspect
+      puts "???"
+      puts "fin--------------------------"
+      # where(conditions.to_h).where(:user_name => user_name).first
+      # where(conditions.to_h).where(["lower(user_name) = :value", { :value => self.user_name.downcase }]).first
+      # where(conditions.to_h).where(["lower(user_name) = :value", { :value => login.downcase }]).first
+      where(conditions.to_h).where(["lower(user_name) = :value", { :value => user_name.downcase }]).first
+    else
+      where(conditions.to_h).first
+    end
+  end
+
   def age
     now = Time.now.utc.to_date
     now.year - birthdate.year - (birthdate.past? ? 1 : 0)

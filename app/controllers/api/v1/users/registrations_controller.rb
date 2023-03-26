@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::User::RegistrationsController < Devise::RegistrationsController
+class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
   respond_to :json
@@ -26,9 +26,13 @@ class Api::V1::User::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    build_resource(sign_up_params)
+    resource.save
+    sign_up(resource_name, resource) if resource.persisted?
+
+    respond_with resource
+  end
 
   # GET /resource/edit
   # def edit
@@ -76,9 +80,9 @@ class Api::V1::User::RegistrationsController < Devise::RegistrationsController
   #   super(resource)
   # end
 
-  private
+  # private
 
-  def sign_up_params
-    params.require(:user).permit(:user_name, :first_name, :last_name, :birthdate, :gender, :password, :password_confirmation)
-  end
+  # def sign_up_params
+  #   params.require(:user).permit(:user_name, :first_name, :last_name, :birthdate, :gender, :password, :password_confirmation)
+  # end
 end

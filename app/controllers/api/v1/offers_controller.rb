@@ -1,6 +1,6 @@
 class Api::V1::OffersController < ApplicationController
   def index
-    if signed_in?
+    if user_signed_in?
       offers = Offer.all.select { |offer| offer.eligible?(current_user) }
       render json: offers, status: :ok
     else
