@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import FormEntry from "./FormEntry";
 import { differenceInCalendarYears } from "date-fns";
 
 const SignupFormV1 = () => {
@@ -25,7 +26,22 @@ const SignupFormV1 = () => {
           password: password,
         },
       }),
-    });
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("response from server: ", data);
+      })
+      .catch((error) => {
+        console.log(
+          "There was a problem with the fetch operation: error: ",
+          error
+        );
+      });
   };
   const {
     register,
@@ -34,6 +50,28 @@ const SignupFormV1 = () => {
     formState: { errors },
   } = useForm({ mode: "onBlur" });
 
+  const genderSelections = [
+    {
+      name: "noselect",
+      label: "Please select one",
+    },
+    {
+      name: "female",
+      label: "female",
+    },
+    {
+      name: "male",
+      label: "male",
+    },
+    {
+      name: "nonbinary",
+      label: "non-binary",
+    },
+    {
+      name: "other",
+      label: "prefer not to say",
+    },
+  ];
   const registerOptions = {
     userName: {
       required: "Username is required",
@@ -72,10 +110,14 @@ const SignupFormV1 = () => {
       validate: (v) =>
         differenceInCalendarYears(new Date(), v) >= 18 ||
         "You must be at least 18 years old to sign up.",
-      map: (v) => v.toISOString()
+      map: (v) => v.toISOString(),
     },
     gender: {
-      validate: (v) => v !== "noselect" || "Please choose one",
+      required: true,
+      defaultValue: "",
+      validate: (v) => {
+        return v !== "noselect" || "You must pick one of the available options.";
+      }
     },
     password: {
       required: "Password is required",
@@ -99,64 +141,75 @@ const SignupFormV1 = () => {
   };
 
   return (
-    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-    <form onSubmit={handleSubmit(signupUser)}>
-      <label className="form-label">Username</label>
-      <input
-        id="user-name"
-        {...register("userName", registerOptions.userName)}
-      />
-      <div className="invalid-feedback">{errors.userName?.message}</div>
-      <label className="form-label">First name</label>
-      <input
-        id="first-name"
-        {...register("firstName", registerOptions.firstName)}
-      />
-      <div className="invalid-feedback">{errors.firstName?.message}</div>
-      <label className="form-label">Last name</label>
-      <input
-        id="last-name"
-        {...register("lastName", registerOptions.lastName)}
-      />
-      <div className="invalid-feedback">{errors.lastName?.message}</div>
-      <label className="form-label">Date of Birth</label>
-      <input
-        id="birthdate"
-        type="date"
-        {...register("birthdate", registerOptions.birthdate)}
-      />
-      <div className="invalid-feedback">{errors.birthdate?.message}</div>
-      <label className="form-label">Gender</label>
-      <select {...register("gender", registerOptions.gender)}>
-        <option value="noselect">select one</option>
-        <option value="female">female</option>
-        <option value="male">male</option>
-        <option value="other">nonbinary</option>
-        <option value="nopref">prefer not to say</option>
-      </select>
-      <div className="invalid-feedback">{errors.gender?.message}</div>
+    <div className="bg-white rounded-lg shadow-lg p-8">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Sign Up</h1>
 
-      <label className="form-label">Password</label>
-      <input
-        id="password"
-        type="password"
-        {...register("password", registerOptions.password)}
-      />
-      <div className="invalid-feedback">{errors.password?.message}</div>
-      <label className="form-label">Password Confirm</label>
-      <input
-        id="password-confirmation"
-        type="password"
-        {...register(
-          "passwordConfirmation",
-          registerOptions.passwordConfirmation
-        )}
-      />
-      <div className="invalid-feedback">
-        {errors.passwordConfirmation?.message}
-      </div>
-      <input type="submit" />
-    </form>
+      <form onSubmit={handleSubmit(signupUser)}>
+        <FormEntry
+          register={register}
+          label="Username"
+          name="userName"
+          options={registerOptions.userName}
+          error={errors.userName}
+        />
+        <FormEntry
+          register={register}
+          label="First name"
+          name="firstName"
+          options={registerOptions.firstName}
+          error={errors.firstName}
+        />
+        <FormEntry
+          register={register}
+          label="Last name"
+          name="lastName"
+          options={registerOptions.lastName}
+          error={errors.lastName}
+        />
+
+        <FormEntry
+          register={register}
+          label="Birthdate"
+          name="birthdate"
+          type="date"
+          options={registerOptions.birthdate}
+          error={errors.birthdate}
+        />
+
+        <FormEntry
+          register={register}
+          label="Gender"
+          name="gender"
+          selections={genderSelections}
+          options={registerOptions.gender}
+          error={errors.gender}
+        />
+
+        <FormEntry
+          register={register}
+          label="Password"
+          name="password"
+          type="password"
+          options={registerOptions.password}
+          error={errors.password}
+        />
+
+        <FormEntry
+          register={register}
+          label="Password confirmation"
+          name="passwordConfirmation"
+          type="password"
+          options={registerOptions.passwordConfirmation}
+          error={errors.passwordConfirmation}
+        />
+        <div className="flex items-center justify-between">
+          <input
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded-md btn-sm"
+            type="submit"
+          ></input>
+        </div>
+      </form>
+    </div>
   );
 };
 
