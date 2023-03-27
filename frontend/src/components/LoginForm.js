@@ -1,33 +1,12 @@
 import { useForm } from "react-hook-form";
 import FormEntry from "./FormEntry";
+import { AppStateContext } from "../state/AppStateContext";
+import loginUser from "../api/loginUser";
+import { useContext } from "react";
 
 const LoginForm = () => {
-  const loginUser = async ({userName, password}) => {
-    try {
-      const response = await fetch("http://localhost:3000/api/v1/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user: {
-            user_name: userName,
-            password: password,
-          },
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      const data = await response.json();
-      console.log("response from server: ", data);
-    } catch (error) {
-      console.log(
-        "There was a problem with the login operation: error: ",
-        error
-      );
-    }
-  };
+
+  const { dispatch } = useContext(AppStateContext);
 
   const {
     register,
@@ -49,7 +28,7 @@ const LoginForm = () => {
       <div className="bg-white rounded-lg shadow-lg p-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Log In</h1>
 
-      <form onSubmit={handleSubmit(loginUser)}>
+      <form onSubmit={handleSubmit((data) => loginUser(data, dispatch))}>
         <FormEntry
           register={register}
           label="Username"
@@ -80,3 +59,29 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+  // const loginUser = async ({userName, password}) => {
+  //   try {
+  //     const response = await fetch("http://localhost:3000/api/v1/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         user: {
+  //           user_name: userName,
+  //           password: password,
+  //         },
+  //       }),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error(response.statusText);
+  //     }
+  //     const data = await response.json();
+  //     console.log("response from server: ", data);
+  //   } catch (error) {
+  //     console.log(
+  //       "There was a problem with the login operation: error: ",
+  //       error
+  //     );
+  //   }
+  // };

@@ -1,45 +1,12 @@
 import { useForm } from "react-hook-form";
 import FormEntry from "./FormEntry";
 import { differenceInCalendarYears } from "date-fns";
+import { useContext } from "react";
+import { AppStateContext } from "../state/AppStateContext";
+import signupUser from "../api/signupUser";
 
 const SignupFormV1 = () => {
-  const signupUser = async ({
-    userName,
-    firstName,
-    lastName,
-    birthdate,
-    gender,
-    password,
-  }) => {
-    try {
-      const response = await fetch("http://localhost:3000/api/v1/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user: {
-            user_name: userName,
-            first_name: firstName,
-            last_name: lastName,
-            birthdate: birthdate,
-            gender: gender,
-            password: password,
-          },
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      const data = await response.json();
-      console.log("response from server: ", data);
-    } catch (error) {
-      console.log(
-        "There was a problem with the signup operation: error: ",
-        error
-      );
-    }
-  };
+  const { dispatch } = useContext(AppStateContext);
 
   const {
     register,
@@ -71,7 +38,7 @@ const SignupFormV1 = () => {
     },
   ];
   const registerOptions = {
-    userName: {
+    username: {
       required: "Username is required",
       minLength: {
         value: 4,
@@ -144,13 +111,13 @@ const SignupFormV1 = () => {
     <div className="bg-white rounded-lg shadow-lg p-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Sign Up</h1>
 
-      <form onSubmit={handleSubmit(signupUser)}>
+      <form onSubmit={handleSubmit((data) => signupUser(data, dispatch))}>
         <FormEntry
           register={register}
           label="Username"
-          name="userName"
-          options={registerOptions.userName}
-          error={errors.userName}
+          name="username"
+          options={registerOptions.username}
+          error={errors.username}
         />
         <FormEntry
           register={register}

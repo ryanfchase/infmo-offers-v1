@@ -5,7 +5,8 @@ import Root from "./pages/Root";
 import ErrorPage from "./pages/ErrorPage";
 import SignupForm from "./components/SignupForm";
 import LoginForm from "./components/LoginForm";
-import "./index.css"
+import "./index.css";
+import { AppStateProvider } from "./state/AppStateContext";
 
 const router = createBrowserRouter([
   {
@@ -24,13 +25,17 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginForm />,
-      }
-    ]
-  }
-])
+      },
+    ],
+  },
+]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AppStateProvider>
+      <RouterProvider router={router} />
+    </AppStateProvider>
+  );
 }
 
 export default App;
