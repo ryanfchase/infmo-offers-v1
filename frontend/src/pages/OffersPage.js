@@ -14,7 +14,6 @@ const OffserPage = () => {
     <>
       <div>
         <div className="bg-indigo-800 py-3 px-6 flex justify-center items-center rounded-t-lg">
-          {/* image goes here */}
           <h2 className="text-white text-2xl font-bold">
             Welcome, {user.firstName}!
           </h2>
