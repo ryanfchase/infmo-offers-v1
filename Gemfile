@@ -40,6 +40,8 @@ gem 'active_model_serializers'
 
 gem 'devise'
 
+gem 'devise-jwt'
+
 gem 'faker'
 
 group :development, :test do
