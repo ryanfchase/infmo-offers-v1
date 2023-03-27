@@ -1,5 +1,5 @@
 const logoutUser = async (
-  { authToken, userName, userID, isLoggedIn },
+  { authToken },
   dispatch
 ) => {
   try {

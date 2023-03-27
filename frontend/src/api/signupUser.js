@@ -45,6 +45,7 @@ const signupUser = async (
     // todo - set state to show error message
     // quick implementation - show alert
     alert("There was a problem with the signup operation: error: " + error);
+    dispatch({ type: "LOGOUT" })
   }
 };
 

@@ -37,6 +37,7 @@ const loginUserWithToken = async (authToken, dispatch) => {
     // todo - set state to show error message
     // quick implementation - show alert
     alert("There was a problem with the login operation: error: " + error);
+    dispatch({ type: "LOGOUT" })
   }
 };
 

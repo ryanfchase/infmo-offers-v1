@@ -11,10 +11,10 @@ const HomePage = () => {
       </p>
       <div className="flex justify-center lg:justify-start">
         <Link
-          to="/signup"
+          to="/offers"
           className="px-4 py-2 text-lg font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
         >
-          Get Started
+          See Offers
         </Link>
       </div>
     </div>
