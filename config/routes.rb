@@ -10,9 +10,8 @@ Rails.application.routes.draw do
         sessions: 'api/v1/users/sessions',
         registrations: 'api/v1/users/registrations'
       }
-      resources :offers, only: [:index, :show]
-      get '/users/me', to: '/api/v1/users/users#me' #, as: 'profile'
-
+      resources :offers, only: [:index]
+      post 'offers/:id/claim', to: 'user_offers#create', as: 'claim_offer'
     end
   end
 end

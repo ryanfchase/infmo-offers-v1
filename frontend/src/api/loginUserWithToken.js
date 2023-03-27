@@ -23,7 +23,10 @@ const loginUserWithToken = async (authToken, dispatch) => {
           lastName: data.user.last_name,
           birthdate: data.user.birthdate,
           gender: data.user.birthdate,
+          age: data.user.age,
+          daysUntilBirthdate: data.user.days_until_birthdate,
         },
+        offers: data.user.offers,
       },
     });
 

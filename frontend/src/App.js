@@ -7,6 +7,7 @@ import SignupForm from "./components/SignupForm";
 import LoginForm from "./components/LoginForm";
 import Offers from "./components/Offers";
 import OffersPage from "./pages/OffersPage";
+// import OfferDetail from "./components/OfferDetail";
 import "./index.css";
 import { AppStateProvider } from "./state/AppStateContext";
 
@@ -36,6 +37,11 @@ const router = createBrowserRouter([
             path: "/offers",
             element: <Offers />,
           },
+          // {
+          // TODO - future implementation
+          //   path: "/offers/:id",
+          //   element: <OfferDetail />
+          // }
         ],
       },
     ],

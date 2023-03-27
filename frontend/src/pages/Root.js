@@ -1,11 +1,12 @@
 import React, { useEffect, useContext } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { AppStateContext } from "../state/AppStateContext";
 import loginUserWithToken from "../api/loginUserWithToken";
 import logoutUser from "../api/logoutUser";
 
 const Root = () => {
   const { authToken, isLoggedIn, user, dispatch } = useContext(AppStateContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const localAuthToken = localStorage.getItem("authToken");
@@ -40,6 +41,7 @@ const Root = () => {
                   className="px-3 py-2 text-sm font-medium text-white bg-indigo-500 rounded-md hover:bg-indigo-700"
                   onClick={() => {
                     logoutUser(authToken, dispatch);
+                    navigate("/");
                   }}
                 >
                   Log Out

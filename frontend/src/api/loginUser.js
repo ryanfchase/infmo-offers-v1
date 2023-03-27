@@ -28,7 +28,10 @@ const loginUser = async ({ username, password }, dispatch) => {
           lastName: data.user.last_name,
           birthdate: data.user.birthdate,
           gender: data.user.gender,
-        }
+          age: data.user.age,
+          daysUntilBirthdate: data.user.days_until_birthdate,
+        },
+        offers: data.user.offers,
       },
     });
     return { status: "success" };

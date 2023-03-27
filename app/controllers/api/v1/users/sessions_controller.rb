@@ -7,7 +7,7 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
   def respond_with(resource, _opts = {})
     render json: {
       message: 'Signed in successfully.',
-      user: current_api_v1_user
+      user: UserSerializer.new(current_api_v1_user)
     }, status: :ok
   end
 
@@ -26,16 +26,20 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
       render json: { errors: 'User not logged in' }, status: :unauthorized
       return
     end
-    render json: { message: 'User signed in by token', user: user}, status: :ok
+    render json: { message: 'User signed in by token', user: UserSerializer.new(user) }, status: :ok
   end
 
   # POST /resource/sign_in
   def create
     self.resource = User.find_for_database_authentication(user_name: params[:user][:user_name])
-    sign_in(resource_name, resource)
-    user = current_api_v1_user
-    yield resource if block_given?
-    respond_with resource, status: :created
+    if self.resource && self.resource.valid_password?(params[:user][:password])
+      sign_in(resource_name, resource)
+      user = current_api_v1_user
+      yield resource if block_given?
+      respond_with resource, status: :created
+    else
+      render json: { errors: 'Invalid user_name or password' }, status: :unauthorized 
+    end
   end
 
   private
