@@ -12,13 +12,15 @@ export const reducer = produce((draft, action) => {
   console.log("REDUCER::action: ", action)
   switch (action.type) {
     case "LOGIN":
+      localStorage.setItem("authToken", action.payload.authToken);
       draft.authToken = action.payload.authToken;
       draft.user = action.payload.user;
       draft.isLoggedIn = true;
       break;
     case "LOGOUT":
+      localStorage.removeItem("authToken");
       draft.authToken = null;
-      draft.username = null;
+      draft.user = {};
       draft.isLoggedIn = false;
       break;
     default:

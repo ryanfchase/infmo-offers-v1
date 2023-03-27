@@ -7,7 +7,7 @@ const logoutUser = async (
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
       },
     });
     if (!response.ok) {
@@ -15,16 +15,18 @@ const logoutUser = async (
     }
     const data = await response.json();
     console.log("response from server: ", data);
-    
+
     // on success
     dispatch({ type: "LOGOUT" });
-
   } catch (error) {
     // on fail
     console.log(
       "There was a problem with the logout operation: error: ",
       error
     );
+    // todo - set state to show error message
+    // quick implementation - show alert
+    alert("There was a problem with the logout operation: error: " + error);
   }
 };
 

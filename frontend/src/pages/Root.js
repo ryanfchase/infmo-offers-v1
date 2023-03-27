@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { AppStateContext } from "../state/AppStateContext";
+import loginUserWithToken from "../api/loginUserWithToken";
+
 
 const Root = () => {
+  const { authToken, user, isLoggedIn, dispatch } = useContext(AppStateContext);
+
+  useEffect(() => {
+    const localAuthToken = localStorage.getItem("authToken");
+    if (localAuthToken && isLoggedIn === false) {
+        console.log("logging in via localStorage token")
+        loginUserWithToken(localAuthToken, dispatch)
+    }
+  });
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <header className="flex items-center justify-between p-4 bg-white shadow-sm">
-        <Link to="/" className="text-lg font-semibold px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-900 rounded-md">
+        <Link
+          to="/"
+          className="text-lg font-semibold px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-900 rounded-md"
+        >
           OffersMobile(TM)
         </Link>
         <nav>

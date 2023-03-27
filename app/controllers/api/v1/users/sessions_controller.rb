@@ -13,7 +13,7 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
 
   def respond_to_on_destroy
     if current_api_v1_user
-      render json: { code: 200, message: 'Signed out successfully.' }, status: :ok
+      render json: { message: 'Signed out successfully.' }, status: :ok
     else
       render json: { message: "Couldn't find an active session to log out." }, status: :unauthorized
     end
@@ -21,6 +21,12 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
 
 
   def new
+    user = get_user_from_token
+    if user.nil?
+      render json: { errors: 'User not logged in' }, status: :unauthorized
+      return
+    end
+    render json: { message: 'User signed in by token', user: user}, status: :ok
   end
 
   # POST /resource/sign_in
@@ -36,5 +42,12 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
   # permits params correctly - but not working
   def sign_in_params
     params.require(:user).permit(:user_name, :password)
+  end
+
+  def get_user_from_token
+    jwt_payload = JWT.decode(request.headers['Authorization'].split(' ').last,
+      Rails.application.credentials.devise[:jwt_secret_key]).first
+    user_id = jwt_payload['sub']
+    user = User.find(user_id.to_s)
   end
 end

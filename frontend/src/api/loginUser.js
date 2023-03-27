@@ -33,9 +33,10 @@ const loginUser = async ({ username, password }, dispatch) => {
       },
     });
   } catch (error) {
-    // on fail
-
     console.log("There was a problem with the login operation: error: ", error);
+    // todo - set state to show error message
+    // quick implementation - show alert
+    alert("There was a problem with the login operation: error: " + error);
   }
 };
 
