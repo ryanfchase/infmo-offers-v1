@@ -4,10 +4,10 @@ import { Link, Outlet } from "react-router-dom";
 const Root = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      <header className="flex items-center justify-between p-4 bg-white">
-        <h1 className="text-lg font-semibold px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-900 rounded-md">
+      <header className="flex items-center justify-between p-4 bg-white shadow-sm">
+        <Link to="/" className="text-lg font-semibold px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-900 rounded-md">
           OffersMobile(TM)
-        </h1>
+        </Link>
         <nav>
           <ul className="flex space-x-4">
             <li>
@@ -29,7 +29,7 @@ const Root = () => {
           </ul>
         </nav>
       </header>
-      <main className="flex grow items-center justify-center flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+      <main className="flex grow items-center justify-center flex-1 px-6 py-6 md:px-4 md:py-4 lg:px-8 lg:py-8">
         <div className="max-w-md w-full">
           <Outlet />
         </div>
