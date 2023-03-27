@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   # has_secure_password
-  devise :database_authenticatable, :registerable, :api
+  # devise :database_authenticatable, :registerable
+  devise :database_authenticatable, :registerable, :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist #, :api,
+
   has_many :user_offers
   has_many :offers, through: :user_offers
 
