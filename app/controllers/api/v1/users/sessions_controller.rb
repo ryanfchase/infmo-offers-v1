@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Users::SessionsController < Devise::SessionsController
-  # before_action :configure_sign_in_params, only: [:create]
+  before_action :configure_sign_in_params, only: [:create]
   respond_to :json
 
   def respond_with(resource, _opts = {})
@@ -50,13 +50,30 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
     # puts "password from params: #{params[:user][:encrypted_password]}"
     # puts "matches password?: #{self.resource.valid_password?(params[:user][:encrypted_password])}"
     # either do this
-    super
+    # super
 
     # or do this
+    # sign_in(resource_name, resource)
+    # yield resource if block_given?
+    # respond_with resource, status: :created
+    # puts "create--------------------------"
+
+    # OR do this
     sign_in(resource_name, resource)
+    puts "resource: #{resource.inspect}"
+    puts "resource_name: #{resource_name.inspect}"
+    # puts "resource_class: #{resource_class.inspect}"
+    # puts "resource.errors: #{resource.errors.inspect}"
+    # puts "resource.errors.full_messages: #{resource.errors.full_messages.inspect}"
+    # puts "current_user: #{current_user.inspect}"
+    puts "current_api_v1_user: #{current_api_v1_user.inspect}"
+    @user = current_api_v1_user
+    puts "@user: #{@user.inspect}"
+    puts "@user.nil?: #{@user.nil?}"
+    puts "signed_in?: #{signed_in?}"
+
     yield resource if block_given?
     respond_with resource, status: :created
-    # puts "create--------------------------"
   end
 
   # DELETE /resource/sign_out
@@ -68,12 +85,12 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
 
   # If you have extra params to permit, append them to the sanitizer.
   # TODO - work in progress
-  # def configure_sign_in_params
-  #   puts "CONFIGURE_SIGN_IN_PARAMS-----------------------"
-  #   added_attrs = [:user_name, :encrypted_password, :remember_me]
-  #   devise_parameter_sanitizer.permit :sign_in, keys:  [:user_name, :encrypted_password]
-  #   puts "--------------------------"
-  # end
+  def configure_sign_in_params
+    puts "CONFIGURE_SIGN_IN_PARAMS-----------------------"
+    added_attrs = [:user_name, :encrypted_password, :remember_me]
+    devise_parameter_sanitizer.permit :sign_in, keys:  [:user_name, :encrypted_password]
+    puts "--------------------------"
+  end
 
   def respond_to_on_failure(_warden_options)
     puts "RESPOND_TO_ON_FAILURE-----------------------"

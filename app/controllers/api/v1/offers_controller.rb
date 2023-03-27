@@ -1,4 +1,7 @@
 class Api::V1::OffersController < ApplicationController
+  skip_before_action :verify_authenticity_token, raise: false
+  before_action :authenticate_api_token!, only: [:index, :show]
+
   def index
     if user_signed_in?
       offers = Offer.all.select { |offer| offer.eligible?(current_user) }

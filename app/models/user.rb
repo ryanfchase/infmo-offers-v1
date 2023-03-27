@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   # has_secure_password
-  devise :database_authenticatable, :registerable #, :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :registerable, :api
   has_many :user_offers
   has_many :offers, through: :user_offers
 
@@ -12,17 +12,7 @@ class User < ApplicationRecord
 
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
-    puts "FIND_FOR_DATABASE_AUTHENTICATION-----------------------"
-    puts conditions
     if user_name = conditions.delete(:user_name)
-      # puts user_name.to_s
-      puts "???"
-      puts where(conditions.to_h).where(["lower(user_name) = :value", { :value => user_name.downcase }]).first.inspect
-      puts "???"
-      puts "fin--------------------------"
-      # where(conditions.to_h).where(:user_name => user_name).first
-      # where(conditions.to_h).where(["lower(user_name) = :value", { :value => self.user_name.downcase }]).first
-      # where(conditions.to_h).where(["lower(user_name) = :value", { :value => login.downcase }]).first
       where(conditions.to_h).where(["lower(user_name) = :value", { :value => user_name.downcase }]).first
     else
       where(conditions.to_h).first

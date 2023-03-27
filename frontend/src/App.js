@@ -1,5 +1,8 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import SignupFormV1 from "./components/SignupFormV1";
+import "./App.css";
+
 
 function App() {
   return (
@@ -17,6 +20,10 @@ function App() {
         >
           Learn React
         </a>
+        <br />
+        <div>More text here!</div>
+        <br />
+        <SignupFormV1 />
       </header>
     </div>
   );

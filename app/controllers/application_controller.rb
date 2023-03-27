@@ -6,5 +6,5 @@ class ApplicationController < ActionController::API
   #   added_attrs = [:user_name, :encrypted_password, :remember_me]
   #   devise_parameter_sanitizer.permit :sign_in, keys:  [:user_name, :encrypted_password]
   #   puts "--------------------------"
-  end
+  # end
 end

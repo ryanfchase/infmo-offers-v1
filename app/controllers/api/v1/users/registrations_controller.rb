@@ -1,21 +1,20 @@
 # frozen_string_literal: true
 
 class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
-  # before_action :configure_sign_up_params, only: [:create]
+  before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
   respond_to :json
 
   def respond_with(resource, _opts = {})
     if resource.persisted?
       render json: {
-        status: { code: 200, message: 'Signed up successfully.' },
+        status: { message: 'Signed up successfully.' },
         # data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
         data: UserSerializer.new(resource).as_json
-      }
+      }, status: :ok
     else
       render json: {
-        # status: { code: 500, message: "User not created successfully: #{resource.errors.full_messages.to_sentence}" }
-        status: { code: 500, message: "User not created successfully." }
+        status: { message: "User not created successfully: #{resource.errors.full_messages.to_sentence}." }
       }, status: :unprocessable_entity
     end
   end
@@ -28,10 +27,17 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     build_resource(sign_up_params)
+    puts "REG::CREATE-----------------------"
+    # puts "params: #{params}"
+    puts "sign_up_params: #{sign_up_params}"
+    puts "################################"
+    puts "resource: #{resource.inspect}"
     resource.save
+    puts "resource.errors: #{resource.errors.full_messages.to_sentence}"
     sign_up(resource_name, resource) if resource.persisted?
 
     respond_with resource
+    puts "REG::CREATE::FIN-----------------------"
   end
 
   # GET /resource/edit
@@ -61,9 +67,9 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   # protected
 
   # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_up_params
-  #   devise_parameter_sanitizer.permit(:user, keys: [:user_name, :password, :password_confirmation])
-  # end
+  def configure_sign_up_params
+    devise_parameter_sanitizer.permit(:user, keys: [:user_name, :password, :first_name, :last_name, :birthdate, :gender])
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_account_update_params
@@ -82,7 +88,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
 
   # private
 
-  # def sign_up_params
-  #   params.require(:user).permit(:user_name, :first_name, :last_name, :birthdate, :gender, :password, :password_confirmation)
-  # end
+  def sign_up_params
+    params.require(:user).permit(:user_name, :first_name, :last_name, :birthdate, :gender, :password)
+  end
 end
