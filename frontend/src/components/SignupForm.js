@@ -1,12 +1,14 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import FormEntry from "./FormEntry";
 import { differenceInCalendarYears } from "date-fns";
-import { useContext } from "react";
+import { useEffect, useContext } from "react";
 import { AppStateContext } from "../state/AppStateContext";
 import signupUser from "../api/signupUser";
 
 const SignupFormV1 = () => {
-  const { dispatch } = useContext(AppStateContext);
+  const { isLoggedIn, dispatch } = useContext(AppStateContext);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -107,11 +109,23 @@ const SignupFormV1 = () => {
     },
   };
 
+  // Don't show the signup form if the user is already logged in
+  useEffect(() => {
+    if (isLoggedIn) navigate("/offers");
+  }, [isLoggedIn, navigate]);
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Sign Up</h1>
 
-      <form onSubmit={handleSubmit((data) => signupUser(data, dispatch))}>
+      <form
+        onSubmit={handleSubmit((data) => {
+          const status = signupUser(data, dispatch);
+          if (status === "success") {
+            navigate("/offers");
+          }
+        })}
+      >
         <FormEntry
           register={register}
           label="Username"

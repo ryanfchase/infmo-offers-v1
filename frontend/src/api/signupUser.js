@@ -37,6 +37,7 @@ const signupUser = async (
         },
       },
     });
+    return { status: "success" };
   } catch (error) {
     console.log(
       "There was a problem with the signup operation: error: ",
@@ -46,6 +47,7 @@ const signupUser = async (
     // quick implementation - show alert
     alert("There was a problem with the signup operation: error: " + error);
     dispatch({ type: "LOGOUT" })
+    return { status: "fail" };
   }
 };
 

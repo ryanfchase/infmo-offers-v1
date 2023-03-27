@@ -5,11 +5,12 @@ import loginUserWithToken from "../api/loginUserWithToken";
 import logoutUser from "../api/logoutUser";
 
 const Root = () => {
-  const { authToken, user, isLoggedIn, dispatch } = useContext(AppStateContext);
+  const { authToken, isLoggedIn, user, dispatch } = useContext(AppStateContext);
 
   useEffect(() => {
     const localAuthToken = localStorage.getItem("authToken");
     if (localAuthToken && isLoggedIn === false) {
+      console.log("-------logging in with local token: ", localAuthToken);
       loginUserWithToken(localAuthToken, dispatch);
     }
   });
@@ -25,7 +26,7 @@ const Root = () => {
         </Link>
         {isLoggedIn ? (
           <nav>
-            <ul className="flex space-x-4">
+            <ul className="flex space-x-4 items-center">
               <li>
                 <Link
                   to="/offers"
@@ -38,7 +39,7 @@ const Root = () => {
                 <button
                   className="px-3 py-2 text-sm font-medium text-white bg-indigo-500 rounded-md hover:bg-indigo-700"
                   onClick={() => {
-                    logoutUser({authToken}, dispatch)
+                    logoutUser(authToken, dispatch);
                   }}
                 >
                   Log Out
@@ -48,7 +49,7 @@ const Root = () => {
           </nav>
         ) : (
           <nav>
-            <ul className="flex space-x-4">
+            <ul className="flex space-x-4 items-center">
               <li>
                 <Link
                   to="/signup"

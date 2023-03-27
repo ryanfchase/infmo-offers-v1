@@ -1,5 +1,5 @@
 const logoutUser = async (
-  { authToken },
+  authToken,
   dispatch
 ) => {
   try {
@@ -18,6 +18,7 @@ const logoutUser = async (
 
     // on success
     dispatch({ type: "LOGOUT" });
+    return { status: "success" };
   } catch (error) {
     // on fail
     console.log(
@@ -27,6 +28,7 @@ const logoutUser = async (
     // todo - set state to show error message
     // quick implementation - show alert
     alert("There was a problem with the logout operation: error: " + error);
+    return { status: "fail" };
   }
 };
 

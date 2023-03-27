@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import FormEntry from "./FormEntry";
-import { AppStateContext } from "../state/AppStateContext";
+import { AppStateContext} from "../state/AppStateContext";
 import loginUser from "../api/loginUser";
-import { useContext } from "react";
+import { useEffect, useContext } from "react";
 
 const LoginForm = () => {
-
-  const { dispatch } = useContext(AppStateContext);
+  const { isLoggedIn, dispatch } = useContext(AppStateContext);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -15,26 +16,37 @@ const LoginForm = () => {
   } = useForm({ mode: "onBlur" });
 
   const registerOptions = {
-    userName: {
+    username: {
       required: "Username is required",
     },
     password: {
       required: "Password is required",
-    }
+    },
+  };
 
-  }
+  // Don't show the login form if the user is already logged in
+  useEffect(() => {
+    if (isLoggedIn) navigate('/offers');
+  }, [isLoggedIn, navigate]);
 
   return (
-      <div className="bg-white rounded-lg shadow-lg p-8">
+    <div className="bg-white rounded-lg shadow-lg p-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Log In</h1>
 
-      <form onSubmit={handleSubmit((data) => loginUser(data, dispatch))}>
+      <form
+        onSubmit={handleSubmit((data) => {
+          const status = loginUser(data, dispatch);
+          if (status === 'success') {
+            navigate("/offers");
+          }
+        })}
+      >
         <FormEntry
           register={register}
           label="Username"
-          name="userName"
-          options={registerOptions.userName}
-          error={errors.userName}
+          name="username"
+          options={registerOptions.username}
+          error={errors.username}
         />
 
         <FormEntry
@@ -54,34 +66,33 @@ const LoginForm = () => {
         </div>
       </form>
     </div>
-  
   );
 };
 
 export default LoginForm;
-  // const loginUser = async ({userName, password}) => {
-  //   try {
-  //     const response = await fetch("http://localhost:3000/api/v1/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         user: {
-  //           user_name: userName,
-  //           password: password,
-  //         },
-  //       }),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error(response.statusText);
-  //     }
-  //     const data = await response.json();
-  //     console.log("response from server: ", data);
-  //   } catch (error) {
-  //     console.log(
-  //       "There was a problem with the login operation: error: ",
-  //       error
-  //     );
-  //   }
-  // };
+// const loginUser = async ({userName, password}) => {
+//   try {
+//     const response = await fetch("http://localhost:3000/api/v1/login", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         user: {
+//           user_name: userName,
+//           password: password,
+//         },
+//       }),
+//     });
+//     if (!response.ok) {
+//       throw new Error(response.statusText);
+//     }
+//     const data = await response.json();
+//     console.log("response from server: ", data);
+//   } catch (error) {
+//     console.log(
+//       "There was a problem with the login operation: error: ",
+//       error
+//     );
+//   }
+// };

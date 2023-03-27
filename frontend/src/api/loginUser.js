@@ -16,7 +16,7 @@ const loginUser = async ({ username, password }, dispatch) => {
       throw new Error(response.statusText);
     }
     const data = await response.json();
-    console.log("response from server: ", data);
+    console.log("loginUser username password :: ", data);
     // on success
     dispatch({
       type: "LOGIN",
@@ -28,16 +28,17 @@ const loginUser = async ({ username, password }, dispatch) => {
           lastName: data.user.last_name,
           birthdate: data.user.birthdate,
           gender: data.user.gender,
-          // todo - send eligible offers
         }
       },
     });
+    return { status: "success" };
   } catch (error) {
     console.log("There was a problem with the login operation: error: ", error);
     // todo - set state to show error message
     // quick implementation - show alert
     alert("There was a problem with the login operation: error: " + error);
     dispatch({ type: "LOGOUT" })
+    return { status: "fail" };
   }
 };
 

@@ -7,7 +7,7 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
   def respond_with(resource, _opts = {})
     render json: {
       message: 'Signed in successfully.',
-      data: current_api_v1_user
+      user: current_api_v1_user
     }, status: :ok
   end
 
@@ -42,12 +42,5 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
   # permits params correctly - but not working
   def sign_in_params
     params.require(:user).permit(:user_name, :password)
-  end
-
-  def get_user_from_token
-    jwt_payload = JWT.decode(request.headers['Authorization'].split(' ').last,
-      Rails.application.credentials.devise[:jwt_secret_key]).first
-    user_id = jwt_payload['sub']
-    user = User.find(user_id.to_s)
   end
 end
