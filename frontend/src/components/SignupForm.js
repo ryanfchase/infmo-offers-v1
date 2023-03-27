@@ -3,7 +3,7 @@ import FormEntry from "./FormEntry";
 import { differenceInCalendarYears } from "date-fns";
 
 const SignupFormV1 = () => {
-  const signupUser = ({
+  const signupUser = async ({
     userName,
     firstName,
     lastName,
@@ -11,38 +11,36 @@ const SignupFormV1 = () => {
     gender,
     password,
   }) => {
-    fetch("http://localhost:3000/api/v1/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user: {
-          user_name: userName,
-          first_name: firstName,
-          last_name: lastName,
-          birthdate: birthdate,
-          gender: gender,
-          password: password,
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("response from server: ", data);
-      })
-      .catch((error) => {
-        console.log(
-          "There was a problem with the fetch operation: error: ",
-          error
-        );
+        body: JSON.stringify({
+          user: {
+            user_name: userName,
+            first_name: firstName,
+            last_name: lastName,
+            birthdate: birthdate,
+            gender: gender,
+            password: password,
+          },
+        }),
       });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      const data = await response.json();
+      console.log("response from server: ", data);
+    } catch (error) {
+      console.log(
+        "There was a problem with the signup operation: error: ",
+        error
+      );
+    }
   };
+
   const {
     register,
     handleSubmit,
@@ -116,8 +114,10 @@ const SignupFormV1 = () => {
       required: true,
       defaultValue: "",
       validate: (v) => {
-        return v !== "noselect" || "You must pick one of the available options.";
-      }
+        return (
+          v !== "noselect" || "You must pick one of the available options."
+        );
+      },
     },
     password: {
       required: "Password is required",

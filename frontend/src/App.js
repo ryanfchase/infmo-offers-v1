@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import Root from "./pages/Root";
 import ErrorPage from "./pages/ErrorPage";
 import SignupForm from "./components/SignupForm";
+import LoginForm from "./components/LoginForm";
 import "./index.css"
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignupForm />,
+      },
+      {
+        path: "/login",
+        element: <LoginForm />,
       }
     ]
   }

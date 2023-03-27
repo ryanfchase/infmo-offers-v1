@@ -20,10 +20,10 @@ const Root = () => {
             </li>
             <li>
               <Link
-                to="/signin"
+                to="/login"
                 className="px-3 py-2 text-sm font-medium text-white bg-indigo-500 rounded-md hover:bg-indigo-700"
               >
-                Sign In
+                Log In
               </Link>
             </li>
           </ul>
